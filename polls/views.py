@@ -1,15 +1,15 @@
 from rest_framework import viewsets, serializers
 
-from .models import Pull, Question
+from .models import Poll, Question
 
 class PullSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Pull
+        model = Poll
         fields = '___all___'
 
 class PullViewSet(viewsets.ModelViewSet):
     serializer_class = PullSerializer
-    queryset = Pull.objects.all()
+    queryset = Poll.objects.all()
 
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
