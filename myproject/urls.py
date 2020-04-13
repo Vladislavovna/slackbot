@@ -18,4 +18,4 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r'polls', PullViewSet, basename='poll')
-urlpatterns = router.urls
+url_patterns + = url (r '^', include (router.urls))
