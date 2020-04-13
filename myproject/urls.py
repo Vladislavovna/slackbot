@@ -17,5 +17,6 @@ from polls.views import PollViewSet
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register(r'polls', PullViewSet, basename='poll')
-url_patterns + = url (r '^', include (router.urls))
+router.register(r'polls', PollViewSet, basename='poll')
+
+urlpatterns = router.urls
