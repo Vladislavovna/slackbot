@@ -17,6 +17,13 @@ from polls.views import PollViewSet
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register(r'polls', PollViewSet, basename='poll')
+router.register(r'polls', PollViewSet, base_name='poll')
 
-urlpatterns = router.urls
+poll_router = routers.NestedSimpleRouter(router, r'polls', lookup='poll')
+poll_router.register(r'questions', QuestionViewSet, base_name='questions')
+
+# urlpatterns = router.urls
+urlpatterns = patterns('',
+    url(r'^', include(router.urls)),
+    url(r'^', include(domains_router.urls)),
+)
