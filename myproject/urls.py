@@ -13,17 +13,20 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from polls.views import PollViewSet
-from rest_framework.routers import DefaultRouter
+from django.conf.urls import url
+from django.urls import include
+from polls.views import PollViewSet, QuestionViewSet
+from rest_framework_nested.routers import DefaultRouter,NestedSimpleRouter
+
 
 router = DefaultRouter()
-router.register(r'polls', PollViewSet, base_name='poll')
+router.register(r'polls', PollViewSet)
 
-poll_router = routers.NestedSimpleRouter(router, r'polls', lookup='poll')
-poll_router.register(r'questions', QuestionViewSet, base_name='questions')
+poll_router = NestedSimpleRouter(router, r'polls', lookup='poll')
+poll_router.register(r'questions', QuestionViewSet)
 
 # urlpatterns = router.urls
-urlpatterns = patterns('',
+urlpatterns = (
     url(r'^', include(router.urls)),
-    url(r'^', include(domains_router.urls)),
+    url(r'^', include(poll_router.urls)),
 )

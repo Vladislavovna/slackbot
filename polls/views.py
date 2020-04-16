@@ -6,7 +6,7 @@ from .models import Poll, Question
 class PollSerializer(serializers.ModelSerializer):
     class Meta:
         model = Poll
-        fields = '___all___'
+        fields = '__all__'
 
 
 class PollViewSet(viewsets.ModelViewSet):
@@ -17,7 +17,7 @@ class PollViewSet(viewsets.ModelViewSet):
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = '___all___'
+        fields = '__all__'
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
