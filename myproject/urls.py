@@ -23,7 +23,7 @@ router = DefaultRouter()
 router.register(r'polls', PollViewSet)
 
 poll_router = NestedSimpleRouter(router, r'polls', lookup='poll')
-poll_router.register(r'questions', QuestionViewSet)
+poll_router.register(r'questions', QuestionViewSet, basename = 'poll-questions')
 
 # urlpatterns = router.urls
 urlpatterns = (

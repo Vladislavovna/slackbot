@@ -22,4 +22,8 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 class QuestionViewSet(viewsets.ModelViewSet):
     serializer_class = QuestionSerializer
-    queryset = Question.objects.all()
+
+    def get_queryset(self):
+        return Question.objects.filter(poll=self.kwargs['poll_pk'])
+
+
