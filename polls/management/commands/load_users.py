@@ -1,8 +1,3 @@
-
-"""
-Базовый класс для выполнения команд по запуску парсинга
-"""
-
 from django.core.management.base import BaseCommand
 
 
