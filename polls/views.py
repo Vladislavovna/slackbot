@@ -5,9 +5,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets, serializers
+import requests
 from slack import WebClient
 
-from .models import Poll, Question, SlackUser, QuestionAnswer
+from .models import Poll, Question, SlackUser, QuestionAnswer, PollUserMeta
 
 
 class PollSerializer(serializers.ModelSerializer):
@@ -51,17 +52,52 @@ def interactive_hook(request):
 
             modal_json = poll.get_modal_json()
 
-            client.views_open(
+            poll_meta = PollUserMeta.objects.get(poll_id=poll_id, slack_user__slack_id=json_dict['user']['id'])
+            poll_meta.response_url = json_dict['response_url']
+            poll_meta.save()
+
+            r = client.views_open(
                 trigger_id=json_dict['trigger_id'],
                 view=modal_json
             )
-            return
+            print(r)
+            return HttpResponse(status=200)
 
     if json_dict['type'] == 'view_submission':
         user, _ = SlackUser.objects.get_or_create(
             slack_id=json_dict['user']['id'],
             username=json_dict['user']['username']
         )
+        question_id_to_block_id = dict()
+
+        for x in json_dict['view']['blocks']:
+            question_id_to_block_id[x['element']['action_id']] = x['block_id']
+
+        state_data = json_dict['view']['state']['values']
+        for k, v in question_id_to_block_id.items():
+            answer = state_data[v][k]['value']
+            QuestionAnswer.objects.create(
+                slack_user=user,
+                question_id=int(k),
+                answer_text=answer
+            )
+
+        poll = Question.objects.get(id=int(next(iter(question_id_to_block_id)))).poll
+        poll_meta = PollUserMeta.objects.get(poll=poll, slack_user=user)
+        client.chat_update(
+            channel=poll_meta.channel,
+            ts=poll_meta.entrypoint_message_ts,
+            attachments=[{
+                "text": f"Ответ на опрос {poll.name} получен",
+                "callback_id": user.slack_id + "hr_poll_started" + str(poll.id),
+                "color": "#3AA3E3",
+                "attachment_type": "default",
+            }]
+        )
+        return HttpResponse(status=200)
+
+
+
 
 
     #return the challenge code here
