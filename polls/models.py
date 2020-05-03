@@ -16,7 +16,7 @@ class Poll(models.Model):
 
         poll_msg = client.chat_postMessage(
             channel=slack_user.slack_id,
-            text=self.message_text,
+            text=self.name,
             attachments=[{
                 "text": self.message_text,
                 "callback_id": slack_user.slack_id + "hr_poll_started" + str(self.id),
