@@ -21,11 +21,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'u@*gaqof+iti&a+m1j%g0l-i126w2sk*9-7o#ey^&j)@us(f6&'
+VERIFICATION_TOKEN = 'EbU63zFStsXgTHpx0ReTRi9c'
+BOT_TOKEN ='xoxb-1093552724881-1085594791111-7YP4zpCgC2gukiT8UcWuKwuX'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+
 
 
 # Application definition

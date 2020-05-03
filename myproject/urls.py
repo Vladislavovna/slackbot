@@ -14,14 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf.urls import url
-from django.urls import include
-from polls.views import PollViewSet, QuestionViewSet
+from django.urls import include, path
+from polls.views import PollViewSet, QuestionViewSet, interactive_hook
 from rest_framework_nested.routers import DefaultRouter,NestedSimpleRouter
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-
 
 
 router = DefaultRouter()
@@ -36,4 +35,5 @@ urlpatterns = (
     url(r'^', include(poll_router.urls)),
     url('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     url('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('event/hook/', interactive_hook, name='event_hook'),
 )
