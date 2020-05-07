@@ -102,4 +102,4 @@ class QuestionAnswer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
     slack_user = models.ForeignKey(SlackUser, on_delete=models.CASCADE, related_name='answers')
     answer_text = models.TextField()
-
+    
