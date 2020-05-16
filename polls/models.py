@@ -106,5 +106,5 @@ class QuestionAnswer(models.Model):
 
 class PollSchedule(models.Model):
     start_at = models.DateTimeField()
-    name_poll = models.ForeignKey(Poll,on_delete=models.CASCADE)
+    poll = models.ForeignKey(Poll,on_delete=models.CASCADE)
     slack_user = models.ForeignKey(SlackUser,on_delete=models.CASCADE)    
