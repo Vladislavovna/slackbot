@@ -31,10 +31,10 @@ poll_router.register(r'questions', QuestionViewSet, basename='poll-questions')
 
 # urlpatterns = router.urls
 urlpatterns = (
-    url(r'^', include(router.urls)),
-    url(r'^', include(poll_router.urls)),
-    path('admin/', admin.site.urls),
-    url('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    url('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # url(r'^', include(router.urls)),
+    # url(r'^', include(poll_router.urls)),
+    path('', admin.site.urls),
+    # url('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # url('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('event/hook/', interactive_hook, name='event_hook'),
 )

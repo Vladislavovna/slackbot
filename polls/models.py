@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.utils.safestring import mark_safe
 
 # Create your models here.
 from slack import WebClient
@@ -10,6 +10,9 @@ from myproject import settings
 class Poll(models.Model):
     name = models.CharField(max_length=20)
     message_text = models.TextField()
+
+    def __str__(self):
+        return f'{self.name}/{self.id}'
 
     def send_poll_starter_to_user(self, slack_user):
         client = WebClient(token=settings.BOT_TOKEN)
@@ -106,5 +109,5 @@ class QuestionAnswer(models.Model):
 
 class PollSchedule(models.Model):
     start_at = models.DateTimeField()
-    poll = models.ForeignKey(Poll,on_delete=models.CASCADE)
-    slack_user = models.ForeignKey(SlackUser,on_delete=models.CASCADE)    
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
+    slack_user = models.ForeignKey(SlackUser, on_delete=models.CASCADE)
