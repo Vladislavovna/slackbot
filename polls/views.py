@@ -8,7 +8,7 @@ from rest_framework import viewsets, serializers
 import requests
 from slack import WebClient
 
-from .models import Poll, Question, SlackUser, QuestionAnswer, PollUserMeta
+from .models import Poll, Question, SlackUser, QuestionAnswer, PollUserMeta, PollAnswer
 
 
 class PollSerializer(serializers.ModelSerializer):
@@ -37,7 +37,6 @@ class QuestionViewSet(viewsets.ModelViewSet):
 
 @csrf_exempt
 def interactive_hook(request):
-
     client = WebClient(token=settings.BOT_TOKEN)
     json_dict = json.loads(request.POST['payload'])
     print(json_dict)
@@ -46,7 +45,6 @@ def interactive_hook(request):
 
     if json_dict['type'] == 'interactive_message':
         if json_dict['actions'][0]['name'] == 'poll_start':
-
             poll_id = json_dict['actions'][0]['value']
             poll = Poll.objects.get(id=int(poll_id))
 
@@ -76,8 +74,11 @@ def interactive_hook(request):
         state_data = json_dict['view']['state']['values']
         for k, v in question_id_to_block_id.items():
             answer = state_data[v][k]['value']
+
+            q = Question.objects.get(id=int(k))
+            poll_ans, _ = PollAnswer.objects.get_or_create(poll=q.poll, slack_user=user, )
             QuestionAnswer.objects.create(
-                slack_user=user,
+                poll_answer=poll_ans,
                 question_id=int(k),
                 answer_text=answer
             )
@@ -96,11 +97,5 @@ def interactive_hook(request):
         )
         return HttpResponse(status=200)
 
-
-
-
-
-    #return the challenge code here
+    # return the challenge code here
     return HttpResponse(status=500)
-
-

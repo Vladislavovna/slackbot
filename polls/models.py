@@ -87,11 +87,17 @@ class Question(models.Model):
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='questions')
     text = models.TextField()
 
+    def __str__(self):
+        return f'{self.text}'
+
 
 class SlackUser(models.Model):
     slack_id = models.CharField(primary_key=True, max_length=20)
     email = models.TextField(null=True)
     username = models.CharField(max_length=200)
+
+    def __str__(self):
+        return f'{self.username}/{self.email}'
 
 
 class PollUserMeta(models.Model):
@@ -101,9 +107,17 @@ class PollUserMeta(models.Model):
     channel = models.TextField(null=True)
 
 
-class QuestionAnswer(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
+class PollAnswer(models.Model):
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
     slack_user = models.ForeignKey(SlackUser, on_delete=models.CASCADE, related_name='answers')
+
+    def __str__(self):
+        return f'{self.poll.name}/{self.slack_user.username}'
+
+
+class QuestionAnswer(models.Model):
+    poll_answer = models.ForeignKey(PollAnswer, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
     answer_text = models.TextField()
 
 
