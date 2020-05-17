@@ -64,7 +64,6 @@ def interactive_hook(request):
     if json_dict['type'] == 'view_submission':
         user, _ = SlackUser.objects.get_or_create(
             slack_id=json_dict['user']['id'],
-            username=json_dict['user']['username']
         )
         question_id_to_block_id = dict()
 
