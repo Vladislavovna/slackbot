@@ -17,4 +17,7 @@ class Command(BaseCommand):
                 email = member['profile']['email']
                 name = member['profile']['real_name']
                 slack_id = member['id']
-                SlackUser.objects.get_or_create(username=name, email=email, slack_id=slack_id)
+                user, _ = SlackUser.objects.get_or_create(slack_id=slack_id)
+                user.username = name
+                user.email = email
+                user.save()
